@@ -20,7 +20,7 @@
 
  * @version   1.0.1
 
- * @author    SimTech Web Solutions <info@simtech.gr>
+ * @author    Sim-Tech <info@simtech.gr>
 
  * @link      https://www.simtech.gr
 
@@ -191,5 +191,6 @@ add_hook('CartTotalAdjustment', 1, function($vars) {
     return $cart_adjustments;
 
 });
+
 
 ?>
