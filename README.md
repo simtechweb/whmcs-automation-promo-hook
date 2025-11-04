@@ -1,5 +1,3 @@
-# whmcs-automation-promo-hook
-
 # WHMCS Automation Promo Code Hook
 
 A WHMCS hook that automatically applies a promo code to orders including a **.gr** domain and a hosting package.
