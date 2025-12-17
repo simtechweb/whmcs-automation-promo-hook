@@ -1,32 +1,26 @@
 <?php
 
-
-
 /**
 
- * Hook για την αυτόματη εφαρμογή κωδικού προσφοράς σε παραγγελίες με domain .gr και πακέτο φιλοξενίας.
+* Hook for automatically applying a promo code to orders with a .gr domain and hosting package.
 
- *
+* This hook is activated during the checkout process.
 
- * Αυτός ο hook ενεργοποιείται κατά τη διάρκεια της διαδικασίας ολοκλήρωσης αγοράς.
+* It checks whether the order includes a .gr domain and hosting package.
 
- * Ελέγχει αν η παραγγελία περιλαμβάνει domain .gr και πακέτο φιλοξενίας.
+* If so, it automatically applies the offer code to the cart and displays a confirmation message.
 
- * Αν ναι, εφαρμόζει αυτόματα τον κωδικό προσφοράς στο καλάθι και εμφανίζει ένα μήνυμα επιβεβαίωσης.
+* @package WHMCS Hook
 
- *
+* @version 1.0.1
 
- * @package   Sim-Tech - WHMCS Hook
+* @author Sim-Tech <info@simtech.gr>
 
- * @version   1.0.1
+* @link https://www.simtech.gr
 
- * @author    Sim-Tech <info@simtech.gr>
+* @since 1.0.0
 
- * @link      https://www.simtech.gr
-
- * @since     1.0.0
-
- */
+*/
 
 
 
@@ -54,7 +48,7 @@ add_hook('CartTotalAdjustment', 1, function($vars) {
 
 
 
-    // Έλεγχος για καταχώρηση domain
+   // Check for domain registration
 
     foreach ($vars['domains'] as $domain) {
 
@@ -70,7 +64,7 @@ add_hook('CartTotalAdjustment', 1, function($vars) {
 
 
 
-    // Έλεγχος για προϊόν φιλοξενίας
+    // Check for hosting product
 
     foreach ($vars['products'] as $product) {
 
@@ -86,25 +80,21 @@ add_hook('CartTotalAdjustment', 1, function($vars) {
 
 
 
-    // Εφαρμογή του κωδικού προσφοράς αν υπάρχουν και domain και hosting
-
+    // Apply the offer code if both domain and hosting are available
+    
     if ($hasDomain && $hasHosting) {
 
-        // Λήψη του ποσού έκπτωσης και αν φορολογείται από τις ρυθμίσεις του κωδικού προσφοράς
+        // Obtaining the discount amount and whether it is taxed according to the offer code settings
 
         $promoCode = Capsule::table('tblpromotions')
 
-            ->where('code', 'dom10') 
+            ->where('code', 'dom10') // enter the name of the promo code
 
             ->first();
-
-
 
         if ($promoCode) {
 
             $discountAmount = $promoCode->value;
-
-
 
             if ($hasHosting && $hasDomain) {
 
@@ -118,11 +108,7 @@ add_hook('CartTotalAdjustment', 1, function($vars) {
 
                 ];
 
-            }
-
-
-
-            
+            }     
 
             if (session_status() == PHP_SESSION_NONE) {
 
@@ -130,9 +116,7 @@ add_hook('CartTotalAdjustment', 1, function($vars) {
 
             }
 
-
-
-            // Εμφάνιση μηνύματος στο καλάθι
+            // Display message in cart
 
             if ($_SERVER['REQUEST_URI'] == '/support/cart.php?a=view') {
 
@@ -185,8 +169,6 @@ add_hook('CartTotalAdjustment', 1, function($vars) {
         }
 
     }
-
-
 
     return $cart_adjustments;
 
